@@ -2,7 +2,7 @@ import PocketBase from 'pocketbase';
 
 import { writable } from 'svelte/store';
 
-export const pb = new PocketBase('https://149.248.62.135:15007/');
+export const pb = new PocketBase('https://moonflowerdata.jgme.io/');
 
 export const currentUser = writable(pb.authStore.model);
 pb.authStore.onChange((auth) => {currentUser.set(pb.authStore.model);});
