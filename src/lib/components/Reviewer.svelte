@@ -28,10 +28,8 @@
 	}
 
 	async function fetchLastReview(): Promise<String> {
-		const record = await pb.collection('users').getOne($currentUser.id, {
-			expand: 'lastReview'
-		});
-        const rating = record.expand.lastReview.rating;
+		const record = await pb.collection('reviews').getOne($currentUser.lastReview);
+        const rating = record.rating;
 		switch (rating) {
 		    case reviewScore.GOOD:
                 return "🔥"

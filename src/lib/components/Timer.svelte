@@ -15,27 +15,28 @@
 
 	onMount(async () => {
 		// First check if we have a new user
-		if(!$currentUser.lastReview)
-		{
+		if (!$currentUser.lastReview) {
+			console.log('transition 1');
 			// Jump to new picking
 			currentState.set(stateEnum.AWAITPICK);
-			return
+			return;
 		}
-		let queryString = 'reviewer="' + $currentUser?.id + '"';
+		// let queryString = 'reviewer="' + $currentUser?.id + '"';
 		try {
-			lastReview = await pb.collection('reviews').getFirstListItem(queryString, {
-				sort: '-created'
-			});
+			lastReview = await pb
+				.collection('reviews')
+				.getOne($currentUser.lastReview)
 		} catch (error) {
 			console.error(error);
 		}
-
+		console.log(lastReview);
 		updateTimer();
 	});
 
 	function updateTimer() {
 		if (lastReview == undefined && $currentState == stateEnum.AWAITTIMER) {
 			// If the user is brand-new, force advance to pick
+			console.log('transition 2');
 			currentState.set(stateEnum.AWAITPICK);
 		}
 		const lastPostTimeDT = new Date(lastReview.created);
@@ -49,6 +50,11 @@
 		};
 
 		if ($currentState == stateEnum.AWAITTIMER && timerExpired) {
+			console.log(nextPostTime - Date.now());
+			console.log(nextPostTime);
+			console.log(Date.now());
+			console.log(remaining);
+			console.log('transition 3');
 			currentState.set(stateEnum.AWAITPICK);
 		}
 	}

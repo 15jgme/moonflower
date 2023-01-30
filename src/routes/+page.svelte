@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Login from '$lib/components/Login.svelte';
 	import { currentUser, currentState, stateEnum } from '$lib/components/pocketbase.js';
 	import Timer from '$lib/components/Timer.svelte';
 	import ArticlePicker from '$lib/components/ArticlePicker.svelte';
 	import Reviewer from '$lib/components/Reviewer.svelte';
 	import ProfileMenu from '$lib/components/ProfileMenu.svelte';
+	console.log($currentState)
 </script>
 
 <html class="dark" lang="ts"
