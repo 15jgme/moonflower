@@ -46,18 +46,24 @@
 		return art;
 	}
 
-	async function fetchLastPaper(): Promise<Record> {
-		const record = await pb.collection('articles').getOne($currentUser.lastPickedPost);
-		return record;
+	async function fetchLastPaper(): Promise<article> {
+		const record = await pb.collection('articles').getOne($currentUser.lastPickedPost, { '$autoCancel': false });
+		console.log(record);
+		let art: article = {
+			url: record.pdf_url,
+			title: record.title,
+			summary: record.summary
+		};
+		return art;
 	}
 </script>
 
 <div>
 	{#if $currentState >= stateEnum.AWAITPICK}
-		<p>{$currentState}</p>
+
 		{#await fetchRandomArticle(false)}
 			<button
-				class="flex text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-800"
+				class="p-4 text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-800 w-auto md:w-36 text-center"
 				disabled
 				><svg class="animate-spin h-5 w-5 mr-3 fill-white" viewBox="0 0 24 24">
 					<path
@@ -113,7 +119,6 @@
 				<p>Processing</p>
 			</button>
 		{:then art}
-			
 			<div class="items-center">
 				<p class="dark:text-white py-3 font-extrabold">Your last picked paper</p>
 				<a
