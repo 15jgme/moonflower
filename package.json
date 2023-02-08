@@ -32,6 +32,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"daisyui": "^2.50.0",
 		"pocketbase": "^0.10.0",
 		"svelte-countdown": "^1.1.2",
 		"svelte-multiselect": "^8.2.4",
