@@ -2,7 +2,10 @@ import PocketBase from 'pocketbase';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
-    event.locals.pb = new PocketBase("https://moonflowerdata.jgme.io");
+
+    const database = "https://moonflowerdata.jgme.io"
+
+    event.locals.pb = new PocketBase(database);
 
     // load the store data from the request cookie string
     event.locals.pb.authStore.loadFromCookie(event.request.headers.get('cookie') || '');

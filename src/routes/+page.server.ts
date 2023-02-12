@@ -1,12 +1,11 @@
 import { serializeNonPOJOProm } from '$lib/helpers.js';
-import { currentUser, currentState, stateEnum } from '$lib/components/pocketbase.js';
 /** @type {import('./$types').PageLoad} */
 
-async function updateState( lastReviewProm ): boolean {
+async function updateState(lastReviewProm): boolean {
 	const lastReview = await lastReviewProm;
 	if (lastReview == undefined) {
 		// If the user is brand-new, force advance to pick
-        console.log("No existing review")
+		console.log('No existing review');
 		return true;
 	}
 	const lastPostTimeDT = new Date(lastReview.created);
@@ -30,7 +29,7 @@ export const load: PageLoad = async ({ locals }) => {
 	if (locals.pb.authStore.isValid) {
 		// From pocketbase we fetch the users last article and last review
 		// We also determine the initial app state, whether or not we are waiting on the timer
-        
+
 		const lastReviewProm = locals.pb.collection('reviews').getOne(locals.user.lastReview);
 
 		return {
@@ -39,15 +38,19 @@ export const load: PageLoad = async ({ locals }) => {
 			lastArticleRecord: serializeNonPOJOProm(
 				locals.pb.collection('articles').getOne(locals.user.lastPickedPost)
 			),
-            newUser: locals.user.lastReview == ''
+			newUser: locals.user.lastReview == ''
 		};
 	}
 };
 
 export const actions = {
 	fetchRandomPaper: async ({ locals }) => {
+		let paperFromCatagoriesUnavailable = undefined
 		let cats: string[] = locals.user?.subscribedCats;
-		let searchQuery = '';
+		const oneDayAgo = new Date(Date.now() - 86400000);
+		let onDayAgo_str = oneDayAgo.getFullYear().toString()+"-"+((oneDayAgo.getMonth()+1).toString().length==2?(oneDayAgo.getMonth()+1).toString():"0"+(oneDayAgo.getMonth()+1).toString())+"-"+(oneDayAgo.getDate().toString().length==2?oneDayAgo.getDate().toString():"0"+oneDayAgo.getDate().toString())+" "+(oneDayAgo.getHours().toString().length==2?oneDayAgo.getHours().toString():"0"+oneDayAgo.getHours().toString())+":"+((parseInt(oneDayAgo.getMinutes()/5)*5).toString().length==2?(parseInt(oneDayAgo.getMinutes()/5)*5).toString():"0"+(parseInt(oneDayAgo.getMinutes()/5)*5).toString())+":00";
+
+		let searchQuery = `created <= "${onDayAgo_str}" && `;
 		for (let i = 0; i < cats.length; i++) {
 			searchQuery = searchQuery + "(catagories ~ '" + cats[i] + "')";
 			if (i < cats.length - 1) {
@@ -60,6 +63,7 @@ export const actions = {
 
 		if (result.items[0] == undefined) {
 			result = await locals.pb.collection('articles').getList(1, 50, { sort: '@random' }); // fetch anything
+			paperFromCatagoriesUnavailable = true
 		}
 
 		// Update last picked post
@@ -67,9 +71,8 @@ export const actions = {
 			lastPickedPost: result.items[0].id
 		};
 		await locals.pb.collection('users').update(locals.user?.id, data);
-		currentState.set(stateEnum.AWAITVIEW); // Update state to wait for user to view on arxive
-		console.log('Paper fetched');
 		return {
+			paperFromCatagoriesUnavailable: paperFromCatagoriesUnavailable,
 			success: true,
 			url: result.items[0].pdf_url,
 			title: result.items[0].title,
@@ -79,20 +82,40 @@ export const actions = {
 	addReview: async ({ request, locals }) => {
 		const formData = await request.formData();
 		const score = Object.fromEntries([...formData]).score;
+		console.log("updating stuff")
 
-		console.log(score);
+		async function updateProfile() {
+			console.log("updating profile")
+			const data = {
+				rating: score,
+				reviewer: locals.user.id,
+				article: locals.user.lastPickedPost
+			};
+			const reviewRec = await locals.pb.collection('reviews').create(data);
 
-		const data = {
-			rating: score,
-			reviewer: locals.user.id,
-			article: locals.user.lastPickedPost
-		};
-		const reviewRec = await locals.pb.collection('reviews').create(data);
+			// example update data
+			const data2 = {
+				lastReview: reviewRec.id
+			};
+			return locals.pb.collection('users').update(locals.user.id, data2);
+		}
 
-		// example update data
-		const data2 = {
-			lastReview: reviewRec.id
-		};
-		await locals.pb.collection('users').update(locals.user.id, data2);
+		async function updateArticle() {
+			// Update article stats
+			console.log("updating art")
+			const reviewArticle = await locals.pb
+				.collection('articles')
+				.getOne(locals.user.lastPickedPost);
+			console.log(reviewArticle)
+			const data = {
+				cumulativeRating: reviewArticle.cumulativeRating + score,
+				numberOfRatings: reviewArticle.numberOfRatings + 1,
+				avgRating: reviewArticle.avgRating + score / (reviewArticle.numberOfRatings + 1)
+			};
+			console.log(data)
+			return locals.pb.collection('articles').update(locals.user.lastPickedPost, data);
+		}
+
+		Promise.all([updateProfile(), updateArticle()]).then((value) => {console.log(value)})
 	}
 };

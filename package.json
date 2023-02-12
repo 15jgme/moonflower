@@ -33,8 +33,10 @@
 	"type": "module",
 	"dependencies": {
 		"daisyui": "^2.50.0",
+		"email-validator": "^2.0.4",
 		"pocketbase": "^0.10.0",
 		"svelte-countdown": "^1.1.2",
+		"svelte-french-toast": "^1.0.3",
 		"svelte-multiselect": "^8.2.4",
 		"svelte-time": "^0.7.1"
 	}

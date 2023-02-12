@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Timer from '$lib/components/Timer.svelte';
-	import Navbar from './navbar.svelte';
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
+	import toast, { Toaster } from 'svelte-french-toast';
 	export let data: any;
 
 	enum stateList {
@@ -20,49 +20,38 @@
 		currentState = stateList.AWAITPICK;
 	}
 
-	enum reviewScore {
-		GOOD = 3,
-		MEDIUM = 2,
-		POOR = 1
-	}
-
-	function toEmoji(score: number): string {
-		switch (score) {
-			case reviewScore.GOOD:
-				return '🔥';
-				break;
-			case reviewScore.MEDIUM:
-				return '💧';
-				break;
-			case reviewScore.POOR:
-				return '❄️';
-				break;
-			default:
-				return '';
-				break;
-		}
-	}
-
 	/*
 		Note: new users will have users.lastReview falsy. This will be our definition! 
 	*/
-	console.log(data);
 	export let form: any;
+
+	function onFormChange() {
+		if (form?.paperFromCatagoriesUnavailable) {
+			toast(
+				"Whoops, we couldn't find a new paper from your favorite catagories today. Instead we fetched something random for you to read!",
+				{
+					icon: '💥'
+				}
+			);
+			form.paperFromCatagoriesUnavailable = undefined;
+		}
+	}
+
+	// Pop the toast whenever we get a formchange
+	$: form, onFormChange();
 </script>
 
-<html class="dark" lang="ts"
-	><div class="bg-wave-bg bg-cover aspect-auto w-auto bg-bottom bg-local overflow-auto">
+<Toaster />
+
+<html class="dark" lang="ts">
+	<div class="bg-wave-bg bg-cover aspect-auto w-auto bg-bottom bg-local overflow-auto">
 		<header><title>Moonflower, a web app to encourage daily Arxive reading </title></header>
 		<body>
 			{#if !data.user}
 				<div class=" items-center h-screen justify-center flex flex-col">
-					<h1
-						class="font-extrabold text-transparent text-4xl bg-clip-text bg-gradient-to-r from-orange-400 to-purple-600 text-center"
-					>
-						🌕Moonflower🌸
-					</h1>
+					<h1 class="font-extrabold text-4xl">🌕Moonflower🌸</h1>
 					<p class="text-m font-medium text-gray-900  dark:text-white text-center">
-						A web app to randomly pick one or more Arxive papers for you to read every day form your
+						A web app to randomly pick one or more Arxive papers for you to read every day from your
 						favourite catagories.
 					</p>
 					<div class="pt-5 md:w-30">
@@ -71,7 +60,6 @@
 				</div>
 			{:else}
 				<div class="h-screen items-center justify-center">
-					<Navbar />
 					<!-- Check for new user -->
 					{#if !data.user.lastReview}
 						<div class="text-center font-bold">
@@ -101,7 +89,7 @@
 											on:click={() =>
 												setTimeout(() => {
 													currentState = stateList.AWAITVIEW;
-												}, 50)}
+												}, 100)}
 										>
 											<p>Pick your paper</p>
 										</button>
@@ -146,54 +134,6 @@
 										<h1 class="font-extrabold text-center dark:text-white">Enter your review</h1>
 										<div class="flex-inline space-x-2 py-2 justify-center">
 											<form action="?/addReview" method="POST" use:enhance>
-												<div>
-													<input type="hidden" name="score" hidden value={1} />
-													<button
-														on:click={() =>
-															setTimeout(() => {
-																invalidateAll();
-																currentState = stateList.AWAITTIMER;
-															}, 50)}
-														class="btn btn-secodary"
-													>
-														<p>❄️</p>
-														<p>Okay</p>
-													</button>
-												</div>
-											</form>
-											<form action="?/addReview" method="POST" use:enhance>
-												<div>
-													<input type="hidden" name="score" hidden value={2} />
-													<button
-														on:click={() =>
-															setTimeout(() => {
-																invalidateAll();
-																currentState = stateList.AWAITTIMER;
-															}, 50)}
-														class="btn btn-secodary"
-													>
-														<p>💧</p>
-														<p>Good</p>
-													</button>
-												</div>
-											</form>
-											<form action="?/addReview" method="POST" use:enhance>
-												<div>
-													<input type="hidden" name="score" hidden value={3} />
-													<button
-														on:click={() =>
-															setTimeout(() => {
-																invalidateAll();
-																currentState = stateList.AWAITTIMER;
-															}, 50)}
-														class="btn btn-secodary"
-													>
-														<p>🔥</p>
-														<p>Great!</p>
-													</button>
-												</div>
-											</form>
-											<form action="?/addReview" method="POST" use:enhance>
 												<div class="rating">
 													<input
 														type="radio"
@@ -227,7 +167,14 @@
 														value="5"
 													/>
 												</div>
-												<button class="btn btn-secodary">Submit</button>
+												<button
+													class="btn btn-secodary"
+													on:click={() =>
+														setTimeout(() => {
+															invalidateAll();
+															currentState = stateList.AWAITTIMER;
+														}, 500)}>Submit</button
+												>
 											</form>
 										</div>
 									{:else if currentState == stateList.AWAITTIMER}
@@ -237,7 +184,7 @@
 												class=" text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-500 dark:hover:bg-gray-600 dark:focus:ring-orange-800"
 												disabled
 											>
-												<p>{toEmoji(data.lastReviewRecord.rating)}</p>
+												<p>{data.lastReviewRecord.rating}/5</p>
 											</button>
 										</div>
 									{/if}
