@@ -22,7 +22,6 @@
 		})
 		return catIDList
 	}
-	// console.log(data);
 	export let form: any;
 </script>
 

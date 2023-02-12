@@ -76,7 +76,8 @@ export const actions = {
 			success: true,
 			url: result.items[0].pdf_url,
 			title: result.items[0].title,
-			summary: result.items[0].summary
+			summary: result.items[0].summary,
+			authors: result.items[0].authors
 		};
 	},
 	addReview: async ({ request, locals }) => {

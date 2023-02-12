@@ -26,7 +26,6 @@
 		try {
 			const data = { username: username, password: password, passwordConfirm: password };
 			const createdUser = await pb.collection('users').create(data);
-			console.log(createdUser);
 
 			await login();
 			return createdUser;

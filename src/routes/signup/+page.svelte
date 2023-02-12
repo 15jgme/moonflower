@@ -57,6 +57,8 @@
 		<div class="w-full max-w-xs pt-3">
 			<button class="btn btn-primary w-full max-w-xs">Sign up</button>
 		</div>
+		
 		<a href="/login" class="link-accent">Already have an account?</a>
+		<a class="link-secondary" href="/cookies">A note on our authentication cookies</a>
 	</form>
 </div>

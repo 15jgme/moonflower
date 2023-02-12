@@ -41,14 +41,13 @@
 				lastPickedPost: result.items[0].id
 			};
 			await pb.collection('users').update($currentUser?.id, data);
-			currentState.set(stateEnum.AWAITVIEW); // Update state to wait for user to view on arxive
+			currentState.set(stateEnum.AWAITVIEW); // Update state to wait for user to view on arXiv
 		}
 		return art;
 	}
 
 	async function fetchLastPaper(): Promise<article> {
 		const record = await pb.collection('articles').getOne($currentUser.lastPickedPost, { '$autoCancel': false });
-		console.log(record);
 		let art: article = {
 			url: record.pdf_url,
 			title: record.title,
@@ -96,7 +95,7 @@
 						href={art.url}
 						target="”_blank”"
 						class="text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-800 w-auto md:w-11"
-						>Read on ArXive</a
+						>Read on arXiv</a
 					>
 					<details class="py-4 dark:text-white text-left">
 						<summary class="font-extrabold">{art.title}</summary>
@@ -125,7 +124,7 @@
 					href={art.url}
 					target="”_blank”"
 					class="p-4 dark:text-white bg-orange-700 hover:bg-orange-800 focus:ring-4 focus:ring-orange-300 font-medium rounded-lg text-sm px-5 py-2.5  dark:bg-orange-400 dark:hover:bg-orange-500 dark:focus:ring-orange-800 w-auto md:w-36"
-					>Read on ArXive</a
+					>Read on arXiv</a
 				>
 				<details class="dark:text-white p-4 text-left">
 					<summary class="font-extrabold">{art.title}</summary>

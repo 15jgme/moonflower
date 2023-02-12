@@ -39,19 +39,37 @@
 
 	// Pop the toast whenever we get a formchange
 	$: form, onFormChange();
+
+	function parseAuthors(authors_json: any): string {
+		try {
+			if (authors_json.length == 0) {
+				return '';
+			}
+
+			if (authors_json.length == 1) {
+				return authors_json[0][0];
+			} else if (authors_json.length == 2) {
+				return `${authors_json[0][0]} and ${authors_json[1][0]}`;
+			} else {
+				return `${authors_json[0][0]} et al.`;
+			}
+		} catch (erorr) {
+			return '';
+		}
+	}
 </script>
 
 <Toaster />
 
 <html class="dark" lang="ts">
 	<div class="bg-wave-bg bg-cover aspect-auto w-auto bg-bottom bg-local overflow-auto">
-		<header><title>Moonflower, a web app to encourage daily Arxive reading </title></header>
+		<header><title>Moonflower, a web app to encourage daily arXiv reading </title></header>
 		<body>
 			{#if !data.user}
 				<div class=" items-center h-screen justify-center flex flex-col">
 					<h1 class="font-extrabold text-4xl">🌕Moonflower🌸</h1>
 					<p class="text-m font-medium text-gray-900  dark:text-white text-center">
-						A web app to randomly pick one or more Arxive papers for you to read every day from your
+						A web app to randomly pick one or more arXiv papers for you to read every day from your
 						favourite catagories.
 					</p>
 					<div class="pt-5 md:w-30">
@@ -106,10 +124,12 @@
 											}}
 											href={form?.url}
 											target="”_blank”"
-											class="btn btn-primary">Read on ArXive</a
+											class="btn btn-primary">Read on arXiv</a
 										>
-										<details class="py-4 dark:text-white text-left">
-											<summary class="font-extrabold">{form?.title}</summary>
+										<details class="py-4 dark:text-white text-centre">
+											<summary class="font-extrabold"
+												>{form?.title + '\n by ' + parseAuthors(form?.authors)}</summary
+											>
 											<p>{form?.summary}</p>
 										</details>
 									</div>
@@ -119,10 +139,15 @@
 										<a
 											href={data.lastArticleRecord.pdf_url}
 											target="”_blank”"
-											class="btn btn-primary">Read on ArXive</a
+											class="btn btn-primary">Read on arXiv</a
 										>
-										<details class="dark:text-white p-4 text-left">
-											<summary class="font-extrabold">{data.lastArticleRecord.title}</summary>
+
+										<details class="dark:text-white p-4 text-centre">
+											<summary class="font-extrabold"
+												>{data.lastArticleRecord.title +
+													'\n by ' +
+													parseAuthors(data.lastArticleRecord.authors)}</summary
+											>
 											<p>{data.lastArticleRecord.summary}</p>
 										</details>
 									</div>
