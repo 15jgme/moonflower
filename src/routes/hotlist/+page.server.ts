@@ -4,7 +4,7 @@ import {serializeNonPOJO} from '$lib/helpers.js'
 
 export const load: PageLoad = async ({locals}) => {
 
-    const resultList: Record[] = await locals.pb.collection('articles').getList(1, 50, {
+    const resultList: Record[] = await locals.pb.collection('articles').getList(1, 10, {
         filter: 'created >= "2022-01-01 00:00:00"',
         sort: '-avgRating'
     });
