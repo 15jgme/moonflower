@@ -77,7 +77,7 @@
 					</div>
 				</div>
 			{:else}
-				<div class="h-screen items-center justify-center">
+				<div class="h-screen items-center justify-center py-3">
 					<!-- Check for new user -->
 					{#if !data.user.lastReview}
 						<div class="text-center font-bold">
@@ -100,7 +100,7 @@
 						{/if}
 						<div class="p-5 text-center">
 							<div>
-								{#if currentState == stateList.AWAITPICK}
+								{#if currentState == stateList.AWAITPICK && data.user.subscribedCats[0]}
 									<form method="POST" action="?/fetchRandomPaper" use:enhance>
 										<button
 											class="btn btn-primary w-full max-w-xs"
