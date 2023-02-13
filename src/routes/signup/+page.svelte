@@ -1,13 +1,27 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { error } from '@sveltejs/kit';
 	import toast, { Toaster } from 'svelte-french-toast';
+	import type { Snapshot } from '../$types';
 	export let form: any;
+
+	let formData = {
+		username: '',
+		email: '',
+	}
+
+	export const snapshot: Snapshot = {
+		capture: () => formData,
+		restore: (value) => {formData = value}
+	}
 
 	function onFormChange() {
 		if (form?.error) {
 			toast.error(form?.message);
 			form.error = undefined;
 			form.message = undefined;
+			formData.username = form.username;
+			formData.email = form.email;
 		}
 	}
 
@@ -34,13 +48,13 @@
 			<label for="name" class="label font-medium pb-1">
 				<span class="label-text">Name</span>
 			</label>
-			<input type="text" name="username" value={form?.username ?? ''} class="input input-bordered w-full max-w-xs" />
+			<input type="text" name="username" bind:value={formData.username} class="input input-bordered w-full max-w-xs" />
 		</div>
 		<div class="form-control w-full max-w-xs">
 			<label for="email" class="label font-medium pb-1">
 				<span class="label-text">Email</span>
 			</label>
-			<input type="email" name="email" value={form?.email ?? ''} class="input input-bordered w-full max-w-xs" />
+			<input type="email" name="email" bind:value={formData.email} class="input input-bordered w-full max-w-xs" />
 		</div>
 		<div class="form-control w-full max-w-xs">
 			<label for="password" class="label font-medium pb-1">
