@@ -1,6 +1,17 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
+	import type { Snapshot } from "@sveltejs/kit";
 	import toast, { Toaster } from 'svelte-french-toast';
+
+	let formData = {
+		username: '',
+	}
+
+	export const snapshot: Snapshot = {
+		capture: () => formData,
+		restore: (value) => {formData = value}
+	}
+
 	export let form: any;
 
 	function onFormChange(){
@@ -9,6 +20,7 @@
 			toast.error(form?.message);
 			form.error = undefined;
 			form.message = undefined;
+			formData.username = form.username;
 		}
 	}
 
@@ -35,7 +47,7 @@
 			<label for="username" class="label font-medium pb-1">
 				<span class="label-text">Name</span>
 			</label>
-			<input type="text" name="username" value={form?.username ?? ""} class="input input-bordered w-full max-w-xs" />
+			<input type="text" name="username" bind:value={formData.username} class="input input-bordered w-full max-w-xs" />
 		</div>
 		<div class="form-control w-full max-w-xs">
 			<label for="password" class="label font-medium pb-1">
