@@ -1,6 +1,7 @@
 import {redirect} from `@sveltejs/kit`
 import type {Actions} from './$types'
 import {serializeNonPOJO} from '$lib/helpers.js'
+import { perPage } from './browseHelpers';
 
 async function fetchArticles(locals, catagories: string[], page: number): Record[]{
     let searchQuery = ''
@@ -15,9 +16,7 @@ async function fetchArticles(locals, catagories: string[], page: number): Record
         }
     }
 
-    console.log(searchQuery)
-  
-    const resultList: Record[] = await locals.pb.collection('articles').getList(page, 20, {
+    const resultList: Record[] = await locals.pb.collection('articles').getList(page, perPage, {
         filter: searchQuery,
         sort: '-created'
     });
