@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		sort: '-created'
 	});
     
-	const {catListStr, IDcatMap, catIDMap} = handle_catRecord(catList);
+	const {catListStr, IDcatMap, catIDMap} = handle_catRecord(catList.reverse());
 	const catListFetched = true;
 	locals.user.subscribedCats.forEach((cat: string) => {
 		// Fetch selections from server
