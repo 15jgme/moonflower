@@ -7,6 +7,8 @@
 
 {#if data.user}
 	<Navbar user={data.user}/>
+{:else}
+	<Navbar user={''}/>
 {/if}
 
 <slot />

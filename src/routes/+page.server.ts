@@ -83,7 +83,6 @@ export const actions = {
 	addReview: async ({ request, locals }) => {
 		const formData = await request.formData();
 		const score = Object.fromEntries([...formData]).score;
-		console.log("updating stuff")
 
 		async function updateProfile() {
 			console.log("updating profile")
