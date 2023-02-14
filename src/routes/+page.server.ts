@@ -5,7 +5,6 @@ async function updateState(lastReviewProm): boolean {
 	const lastReview = await lastReviewProm;
 	if (lastReview == undefined) {
 		// If the user is brand-new, force advance to pick
-		console.log('No existing review');
 		return true;
 	}
 	const lastPostTimeDT = new Date(lastReview.created);
@@ -85,7 +84,6 @@ export const actions = {
 		const score = Object.fromEntries([...formData]).score;
 
 		async function updateProfile() {
-			console.log("updating profile")
 			const data = {
 				rating: score,
 				reviewer: locals.user.id,
@@ -102,17 +100,14 @@ export const actions = {
 
 		async function updateArticle() {
 			// Update article stats
-			console.log("updating art")
 			const reviewArticle = await locals.pb
 				.collection('articles')
 				.getOne(locals.user.lastPickedPost);
-			console.log(reviewArticle)
 			const data = {
 				cumulativeRating: reviewArticle.cumulativeRating + score,
 				numberOfRatings: reviewArticle.numberOfRatings + 1,
 				avgRating: reviewArticle.avgRating + score / (reviewArticle.numberOfRatings + 1)
 			};
-			console.log(data)
 			return locals.pb.collection('articles').update(locals.user.lastPickedPost, data);
 		}
 

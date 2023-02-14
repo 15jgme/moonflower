@@ -18,9 +18,6 @@ export const actions = {
             const {token, user} = await locals.pb.collection('users').authWithPassword(data.username, data.password);
         }
         catch(error){
-            // console.error(error);
-            console.log("error")
-            // throw error;
             return {
                 error: true,
                 message: "Incorrect username or password",

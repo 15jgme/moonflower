@@ -17,8 +17,6 @@ export const actions = {
 		const formData = await request.formData();
 		const data = Object.fromEntries([...formData]);
 
-		console.log(data);
-
 		if (!EmailValidator.validate(data.email)) {
 			// Email is invalid
 			return {
