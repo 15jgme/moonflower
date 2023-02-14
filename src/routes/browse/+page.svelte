@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { perPage } from './browseHelpers';
 
 	export let data: any;
 	export let form = data.articles.items;
@@ -7,9 +8,11 @@
 
 	function onFormChange() {
 		if (form?.articles) {
-			if(form?.articles.items.length < 10){
+			let newLoadLimitReached = false
+			if(form?.articles.items.length < perPage){
 				// We reached our limit
 				limitReached = true
+				newLoadLimitReached = true
 			}
 
 			if (form?.append) {
@@ -20,7 +23,7 @@
 			articles = form.articles.items;
 			form.articles = undefined;
 			
-			if(!limitReached){limitReached = false} // reset limit on switch
+			if(!newLoadLimitReached){limitReached = false} // reset limit on switch
 
 			return;
 		}
@@ -30,15 +33,16 @@
 
 	let currentPage = 1;
 	let useUserCats = true;
-	let limitReached = articles.length < 10;
+	let limitReached = articles.length < perPage;
 
-	console.log(articles.length >= 10)
+	console.log(articles.length >= perPage)
 	// console.log(alert(JSON.stringify(articles, null, 4)))
 </script>
 
 <title>Browse</title>
 
 <h1 class="text-neutral-content p-5 font-bold text-xl">Browse recent work</h1>
+<p>{limitReached}</p>
 <div class="flex-col justify-center space-y-3 px-5">
 	{#if data.user}
 		<div class="flex">
