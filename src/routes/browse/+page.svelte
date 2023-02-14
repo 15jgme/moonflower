@@ -18,6 +18,7 @@
 			if (form?.append) {
 				articles = articles.concat(form?.articles.items);
 				currentPage++;
+				form.articles = undefined;
 				return;
 			}
 			articles = form.articles.items;
@@ -35,8 +36,6 @@
 	let useUserCats = true;
 	let limitReached = articles.length < perPage;
 
-	console.log(articles.length >= perPage)
-	// console.log(alert(JSON.stringify(articles, null, 4)))
 </script>
 
 <title>Browse</title>
@@ -51,6 +50,7 @@
 						class={!useUserCats ? 'btn btn-active btn-primary btn-disabled text-base-100' : 'btn'}
 						on:click={() => {
 							useUserCats = false;
+							form.articles = undefined;
 						}}>Browse all</button
 					>
 					<input hidden name="userCats" value={useUserCats} />
@@ -60,6 +60,7 @@
 						class={useUserCats ? 'btn btn-active btn-primary btn-disabled text-base-100' : 'btn'}
 						on:click={() => {
 							useUserCats = true;
+							form.articles = undefined;
 						}}>My catagories only</button
 					>
 					<input hidden name="userCats" value={useUserCats} />

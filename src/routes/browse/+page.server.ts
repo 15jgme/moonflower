@@ -33,7 +33,6 @@ export const load: PageLoad = async ({locals}) => {
         }
     } else {
         const data = await fetchArticles(locals,undefined, 1)
-        // console.log(data)
         return {
             articles: data
         }
@@ -46,9 +45,8 @@ export const actions = {
         
 		const formData = await request.formData();
 		const {page, userCats} = Object.fromEntries([...formData]);
-        console.log(locals.user?.subscribedCats)
 
-        if(userCats){
+        if(userCats == 'true'){
             return {
                 append: true,
                 articles: await fetchArticles(locals,locals.user?.subscribedCats, page)
@@ -64,16 +62,13 @@ export const actions = {
         
 		const formData = await request.formData();
 		const {userCats} = Object.fromEntries([...formData]);
-        console.log(userCats)
 
         if(userCats == 'true'){
-            console.log("foo")
             return {
                 append: false,
                 articles: await fetchArticles(locals,locals.user?.subscribedCats, 1)
             }
         } else {
-            console.log("bar")
             return {
                 append: false,
                 articles: await fetchArticles(locals,undefined, 1)
