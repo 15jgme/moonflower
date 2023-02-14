@@ -41,7 +41,7 @@
 
 <title>Browse</title>
 
-<h1 class="text-neutral-content p-5 font-bold text-xl">Browse recent work</h1>s
+<h1 class="text-neutral-content p-5 font-bold text-xl">Browse recent work</h1>
 <div class="flex-col justify-center space-y-3 px-5">
 	{#if data.user}
 		<div class="flex">
