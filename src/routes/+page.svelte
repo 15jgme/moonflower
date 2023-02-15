@@ -30,7 +30,8 @@
 			toast(
 				"Whoops, we couldn't find a new paper from your favorite catagories today. Instead we fetched something random for you to read!",
 				{
-					icon: '💥'
+					icon: '💥',
+					duration: 6000,
 				}
 			);
 			form.paperFromCatagoriesUnavailable = undefined;
@@ -101,7 +102,7 @@
 					{/if}
 					<div class="p-5 flex flex-col">
 						{#if currentState == stateList.AWAITTIMER}
-							<div class="text-center"><Timer lastReview={data.lastReviewRecord} /></div>
+							<div class="text-center"><Timer lastReview={data.lastReviewRecord} appState={currentState}/></div>
 						{/if}
 						<div class="p-5 text-center">
 							<div>
