@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { currentUser, currentState, stateEnum } from '$lib/components/pocketbase.js';
-	import { pb } from '$lib/components/pocketbase';
 	import { Record } from 'pocketbase';
-	import { onMount } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
 
 	interface time {
 		hours: number;
@@ -13,6 +11,7 @@
 	let timerExpired: boolean = false;
 
 	export let lastReview: Record;
+	export let appState: number = 0;
 
 	function updateTimer() {
 		const lastPostTimeDT = new Date(lastReview.created);
@@ -20,11 +19,17 @@
 		timerExpired = nextPostTime - Date.now() < 0;
 		let seconds_rem = (nextPostTime - Date.now()) / 1000;
 
+		if(timerExpired && appState == 0){
+			// If our timer runs out reload the page
+			invalidateAll()
+		}
+
 		remaining = {
 			hours: Math.trunc(seconds_rem / 3600),
 			minutes: Math.trunc((seconds_rem % 3600) / 60)
 		};
 	}
+
 
 	updateTimer();
 	setInterval(updateTimer, 60000); // Update timer every minute
