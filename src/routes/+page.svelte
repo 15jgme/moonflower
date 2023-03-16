@@ -3,6 +3,7 @@
 	import { enhance } from '$app/forms';
 	import { invalidateAll } from '$app/navigation';
 	import toast, { Toaster } from 'svelte-french-toast';
+	import { parseAuthors } from '$lib/helpers';
 	export let data: any;
 
 	enum stateList {
@@ -41,29 +42,13 @@
 	// Pop the toast whenever we get a formchange
 	$: form, onFormChange();
 
-	function parseAuthors(authors_json: any): string {
-		try {
-			if (authors_json.length == 0) {
-				return '';
-			}
-
-			if (authors_json.length == 1) {
-				return authors_json[0][0];
-			} else if (authors_json.length == 2) {
-				return `${authors_json[0][0]} and ${authors_json[1][0]}`;
-			} else {
-				return `${authors_json[0][0]} et al.`;
-			}
-		} catch (erorr) {
-			return '';
-		}
-	}
+	
 </script>
 
 <Toaster />
 
 <html class="dark" lang="ts">
-	<div class="bg-wave-bg bg-cover aspect-auto w-auto bg-bottom bg-local overflow-auto">
+	<div class="">
 		<header><title>Moonflower, a web app to encourage daily arXiv reading </title></header>
 		<body>
 			{#if !data.user}
@@ -102,7 +87,7 @@
 					{/if}
 					<div class="p-5 flex flex-col">
 						{#if currentState == stateList.AWAITTIMER}
-							<div class="text-center"><Timer lastReview={data.lastReviewRecord} appState={currentState}/></div>
+							<div class="text-center"><Timer lastReview={data.lastReviewRecord} bind:appState={currentState}/></div>
 						{/if}
 						<div class="p-5 text-center">
 							<div>

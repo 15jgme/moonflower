@@ -1,4 +1,4 @@
-import { serializeNonPOJOProm } from '$lib/helpers.js';
+import { serializeNonPOJOProm } from '$lib/helpers.ts';
 /** @type {import('./$types').PageLoad} */
 
 async function updateState(lastReviewProm): boolean {

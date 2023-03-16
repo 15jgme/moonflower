@@ -3,12 +3,14 @@
 	import Navbar from './navbar.svelte';
 
 	export let data: any;
+
+
 </script>
 
 {#if data.user}
-	<Navbar user={data.user}/>
+	<Navbar user={data.user} />
 {:else}
-	<Navbar user={''}/>
+	<Navbar user={''} />
 {/if}
 
 <slot />

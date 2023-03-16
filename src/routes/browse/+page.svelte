@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import ArticleCard from '$lib/components/ArticleCard.svelte';
 	import { perPage } from './browseHelpers';
 
 	export let data: any;
@@ -70,12 +71,7 @@
 	{/if}
 
 	{#each articles as article, i}
-		<div class="card w-auto  bg-neutral text-neutral-content shadow-xl">
-			<div class="card-body">
-				<a href={article.pdf_url} class="card-title">{article.title}</a>
-				<p>🔥: {article.avgRating}</p>
-			</div>
-		</div>
+		<ArticleCard article={article}/>
 	{/each}
 	{#if !limitReached}
 		<form method="POST" action="?/loadMore" use:enhance>

@@ -1,7 +1,23 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import CatagorySelector from '$lib/components/CatagorySelector.svelte';
+	// import CatagorySelector from '$lib/components/CatagorySelector.svelte';
 	import MultiSelect from 'svelte-multiselect';
+	import ThemeChange from '$lib/components/ThemeChange.svelte';
+	import { onMount } from 'svelte';
+	import { themeChange } from 'theme-change';
+	import {theme, initTheme, applyTheme} from 'fractils';
+
+	// onMount(() => {
+	// 	themeChange(false);
+	// });
+
+	let onChange = () => {
+        // console.log("foo")
+		// applyTheme(theme_sel)
+        // console.log(theme_sel)
+        // applyTheme("cupcake")
+        console.log("foo")
+	}
 
 	let catIDMap: { [id: string]: string } = {};
 	let IDcatMap: { [id: string]: string } = {};
@@ -14,24 +30,23 @@
 	export let data: any;
 	let selected = data.selected;
 
-	function CatArr2ID(catArr: string[]): string[]
-	{
-		let catIDList: string[] = []
+	function CatArr2ID(catArr: string[]): string[] {
+		let catIDList: string[] = [];
 		catArr.forEach((cat: string) => {
-				catIDList.push(data.catIDMap[cat]);
-		})
-		return catIDList
+			catIDList.push(data.catIDMap[cat]);
+		});
+		return catIDList;
 	}
-	export let form: any;
+	// export let form: any;
 </script>
 
 <html class="dark" lang="ts"
 	><header><title>Settings</title></header>
 	<body>
-		<div class="bg-wave-bg h-screen bg-cover aspect-auto w-auto bg-bottom bg-local overflow-auto">
+		<div class="">
 			<div class="">
 				<div class="items-center justify-center flex flex-col multiselect">
-					<p class="text-white">⭐ Favourite catagories</p>
+					<p class="">⭐ Favourite catagories</p>
 					<div class="dark:bg-slate-800 hover:dark:bg-slate-900 w-2/3 md:w-auto multiselect">
 						<form method="POST" action="?/updateUserCat" class="flex" use:enhance>
 							<MultiSelect
@@ -59,6 +74,11 @@
 								<p class="pl-2">save</p>
 							</button>
 						</form>
+					</div>
+					<div class="py-5">
+						<!-- <h3>Theme</h3> -->
+						<!-- <ThemeChange /> -->
+						<button class="btn" on:click={onChange}>foo</button>
 					</div>
 				</div>
 			</div>

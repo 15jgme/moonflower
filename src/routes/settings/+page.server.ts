@@ -1,4 +1,4 @@
-import { serializeNonPOJO } from '$lib/helpers.js';
+import { serializeNonPOJO } from '$lib/helpers.ts';
 
 function handle_catRecord(record: Record[]): string[] {
 	let catListProc: string[] = [];

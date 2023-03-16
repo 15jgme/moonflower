@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Record } from 'pocketbase';
-	import { invalidateAll } from '$app/navigation';
+	import { invalidate } from '$app/navigation';
+	import { browser } from "$app/environment";
 
 	interface time {
 		hours: number;
@@ -11,17 +12,23 @@
 	let timerExpired: boolean = false;
 
 	export let lastReview: Record;
-	export let appState: number = 0;
+	export let appState: number;
 
 	function updateTimer() {
+		console.log("test")
 		const lastPostTimeDT = new Date(lastReview.created);
 		let nextPostTime = lastPostTimeDT.setDate(lastPostTimeDT.getDate() + 1);
 		timerExpired = nextPostTime - Date.now() < 0;
 		let seconds_rem = (nextPostTime - Date.now()) / 1000;
 
-		if(timerExpired && appState == 0){
+		console.log(timerExpired)
+		console.log(appState)
+		console.log(browser)
+
+		if(timerExpired && appState == 0 && browser){
 			// If our timer runs out reload the page
-			invalidateAll()
+			console.log("Reload page")
+			// appState = 1;
 		}
 
 		remaining = {

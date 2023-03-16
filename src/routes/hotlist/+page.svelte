@@ -1,4 +1,7 @@
 <script lang="ts">
+	import ArticleCard from "$lib/components/ArticleCard.svelte";
+
+
 	export let data: any;
 </script>
 
@@ -9,13 +12,7 @@
 <div class="flex-col justify-center space-y-3 px-5">
 	{#each data.articles.items as article, i}
 		{#if article.numberOfRatings > 0}
-			<div class="card w-auto  bg-neutral text-neutral-content shadow-xl">
-				<div class="card-body">
-					<p>#{i + 1}</p>
-					<a href={article.pdf_url} class="card-title">{article.title}</a>
-					<p>🔥: {article.avgRating}</p>
-				</div>
-			</div>
+			<ArticleCard article={article} index={i}/>
 		{/if}
 	{/each}
 </div>
