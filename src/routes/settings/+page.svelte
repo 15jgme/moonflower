@@ -11,14 +11,6 @@
 	// 	themeChange(false);
 	// });
 
-	let onChange = () => {
-        // console.log("foo")
-		// applyTheme(theme_sel)
-        // console.log(theme_sel)
-        // applyTheme("cupcake")
-        console.log("foo")
-	}
-
 	let catIDMap: { [id: string]: string } = {};
 	let IDcatMap: { [id: string]: string } = {};
 
@@ -77,8 +69,8 @@
 					</div>
 					<div class="py-5">
 						<!-- <h3>Theme</h3> -->
-						<!-- <ThemeChange /> -->
-						<button class="btn" on:click={onChange}>foo</button>
+						<ThemeChange />
+						<!-- <button class="btn" on:click={onChange}>foo</button> -->
 					</div>
 				</div>
 			</div>

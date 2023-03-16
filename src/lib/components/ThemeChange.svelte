@@ -1,27 +1,24 @@
 <script lang="ts">
     // // Based on sveltekit-theme-switch-example by spences10
-    // import { themeChange } from 'theme-change';
-	// import {theme, initTheme, applyTheme} from 'fractils';
-    // import { onMount } from 'svelte';
+    import { themeChange } from 'theme-change';
+	import {theme, initTheme, applyTheme} from 'fractils';
+    import { onMount } from 'svelte';
 
-	// onMount(() => {
-	// 	themeChange(false);
-    //     // applyTheme("cupcake")
-	// });
+	onMount(() => {
+		themeChange(false);
+        // applyTheme("cupcake")
+	});
 
-    // let theme_sel: string = "acid";
+    let theme_sel: string = "acid";
 
     const onChange = () => {
-        // console.log("foo")
-		// applyTheme(theme_sel)
-        // console.log(theme_sel)
-        // applyTheme("cupcake")
-        console.log("foo")
+		applyTheme(theme_sel)
+        console.log(theme_sel)
 	}
 
 </script>
 
-<!-- <div class="mb-8">
+<div class="mb-8">
     <select
 
       bind:value={theme_sel} on:change={onChange}
@@ -56,6 +53,4 @@
       <option value="winter">Winter</option>
       <option value="wireframe">Wireframe</option>
     </select>
-</div> -->
-
-<button class="btn" on:click={onChange}>foo</button>
+</div>
