@@ -111,6 +111,6 @@ export const actions = {
 			return locals.pb.collection('articles').update(locals.user.lastPickedPost, data);
 		}
 
-		Promise.all([updateProfile(), updateArticle()]).then((value) => {console.log(value)})
+		Promise.all([updateProfile(), updateArticle()])
 	}
 };

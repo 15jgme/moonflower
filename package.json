@@ -39,6 +39,7 @@
 		"svelte-countdown": "^1.1.2",
 		"svelte-french-toast": "^1.0.3",
 		"svelte-multiselect": "^8.2.4",
+		"svelte-select": "^5.6.0",
 		"svelte-time": "^0.7.1",
 		"theme-change": "^2.5.0"
 	}

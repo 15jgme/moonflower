@@ -1,79 +1,123 @@
 <script lang="ts">
+	import Select from 'svelte-select';
 	import { enhance } from '$app/forms';
-	// import CatagorySelector from '$lib/components/CatagorySelector.svelte';
-	import MultiSelect from 'svelte-multiselect';
 	import ThemeChange from '$lib/components/ThemeChange.svelte';
-	import { onMount } from 'svelte';
-	import { themeChange } from 'theme-change';
-	import {theme, initTheme, applyTheme} from 'fractils';
+	import { invalidateAll } from '$app/navigation';
 
-	// onMount(() => {
-	// 	themeChange(false);
-	// });
-
-	let catIDMap: { [id: string]: string } = {};
-	let IDcatMap: { [id: string]: string } = {};
-
-	// let catList: Promise<any>;
-	let catListLoadProm = Promise<string[]>;
-	let catListFetched: boolean = false;
-	let catListStr: string[] = [];
+	import { scale } from 'svelte/transition';
 
 	export let data: any;
-	let selected = data.selected;
 
-	function CatArr2ID(catArr: string[]): string[] {
-		let catIDList: string[] = [];
-		catArr.forEach((cat: string) => {
-			catIDList.push(data.catIDMap[cat]);
-		});
-		return catIDList;
-	}
 	// export let form: any;
+	const groupBy = (item: any) => item.group;
+
+	let catagory_loading: boolean = false;
 </script>
 
-<html class="dark" lang="ts"
-	><header><title>Settings</title></header>
-	<body>
-		<div class="">
-			<div class="">
-				<div class="items-center justify-center flex flex-col multiselect">
-					<p class="">⭐ Favourite catagories</p>
-					<div class="dark:bg-slate-800 hover:dark:bg-slate-900 w-2/3 md:w-auto multiselect">
-						<form method="POST" action="?/updateUserCat" class="flex" use:enhance>
-							<MultiSelect
-								bind:selected
-								options={data.catListStr}
-								breakpoint={800}
-								autoScroll={true}
-								--sms-options-bg="#334155"
-								--sms-text-color="white"
-							/>
-							<input type="hidden" name="catagories" value={CatArr2ID(selected)} />
-							<button class="btn-primary btn"
-								><svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="16"
-									height="16"
-									fill="currentColor"
-									class="bi bi-save"
-									viewBox="0 0 16 16"
-								>
-									<path
-										d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"
-									/>
-								</svg>
-								<p class="pl-2">save</p>
-							</button>
-						</form>
-					</div>
-					<div class="py-5">
-						<!-- <h3>Theme</h3> -->
-						<ThemeChange />
-						<!-- <button class="btn" on:click={onChange}>foo</button> -->
-					</div>
+<body>
+	<div class="items-center justify-center flex flex-col multiselect">
+		<div class="flex flex-col border-opacity-50">
+			<div class="divider">Your catagories</div>
+			<div class="py-5 card bg-base-300 rounded-box place-items-center">
+				<div class="overflow-x-auto">
+					<form
+						method="POST"
+						action="?/removeCatagories"
+						class="flex"
+						use:enhance={({ form, data, action, cancel, submitter }) => {
+							if (!catagory_loading) {
+								catagory_loading = true;
+							}
+							return async ({ result, update }) => {
+								if (catagory_loading) {
+									catagory_loading = false;
+								}
+								update();
+							};
+						}}
+					>
+						<table class="table w-full">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Description</th>
+									<th><button class="btn btn-primary">Remove</button></th>
+								</tr>
+							</thead>
+							<tbody>
+								{#each data.usersCatagories as catagory}
+									<tr transition:scale>
+										<td>{catagory.value}</td>
+										<td>{catagory.label}</td>
+
+										<th>
+											<label>
+												<input type="checkbox" name={catagory.id} class="checkbox" />
+											</label>
+										</th>
+									</tr>
+								{/each}
+							</tbody>
+						</table>
+					</form>
 				</div>
+				<p class="py-2">Add catagories</p>
+				<div class="md:px-2 inline-flex">
+					<form
+						method="POST"
+						action="?/addCatagories"
+						class="flex"
+						use:enhance={({ form, data, action, cancel, submitter }) => {
+							if (!catagory_loading) {
+								catagory_loading = true;
+							}
+							return async ({ result, update }) => {
+								if (catagory_loading) {
+									catagory_loading = false;
+								}
+								update();
+								invalidateAll();
+							};
+						}}
+					>
+						<div class="w-min">
+							<Select
+								items={data.availableCatagories}
+								multiple={true}
+								{groupBy}
+								name="catagories"
+							/>
+						</div>
+						<div class="px-2" />
+						<button class="btn btn-primary"> save </button>
+					</form>
+				</div>
+				{#if catagory_loading}
+					<div role="status" class="p-2 justify-center" transition:scale>
+						<svg
+							aria-hidden="true"
+							class="w-8 h-8 mr-2 text-neutral animate-spin fill-primary"
+							viewBox="0 0 100 101"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+								fill="currentColor"
+							/>
+							<path
+								d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+								fill="currentFill"
+							/>
+						</svg>
+					</div>
+				{/if}
+			</div>
+
+			<div class="divider">Themes</div>
+			<div class="py-5 grid h-20 card bg-base-300 rounded-box place-items-center">
+				<ThemeChange />
 			</div>
 		</div>
-	</body></html
+	</div></body
 >

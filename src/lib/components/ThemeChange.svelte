@@ -9,11 +9,10 @@
         // applyTheme("cupcake")
 	});
 
-    let theme_sel: string = "acid";
+    let theme_sel: string = "cupcake";
 
     const onChange = () => {
 		applyTheme(theme_sel)
-        console.log(theme_sel)
 	}
 
 </script>
@@ -21,7 +20,8 @@
 <div class="mb-8">
     <select
 
-      bind:value={theme_sel} on:change={onChange}
+    data-choose-theme
+    class="select select-bordered select-primary w-full max-w-3xl text-xl"
     >
       <option value="acid">Acid</option>
       <option value="aqua">Aqua</option>
