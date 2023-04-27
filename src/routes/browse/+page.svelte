@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import { enhance } from '$app/forms';
+	import ArticleCard from '$lib/components/ArticleCard.svelte';
 	import { perPage } from './browseHelpers';
+	import { scale } from 'svelte/transition';
 
 	export let data: any;
 	export let form = data.articles.items;
@@ -8,11 +11,11 @@
 
 	function onFormChange() {
 		if (form?.articles) {
-			let newLoadLimitReached = false
-			if(form?.articles.items.length < perPage){
+			let newLoadLimitReached = false;
+			if (form?.articles.items.length < perPage) {
 				// We reached our limit
-				limitReached = true
-				newLoadLimitReached = true
+				limitReached = true;
+				newLoadLimitReached = true;
 			}
 
 			if (form?.append) {
@@ -23,8 +26,10 @@
 			}
 			articles = form.articles.items;
 			form.articles = undefined;
-			
-			if(!newLoadLimitReached){limitReached = false} // reset limit on switch
+
+			if (!newLoadLimitReached) {
+				limitReached = false;
+			} // reset limit on switch
 
 			return;
 		}
@@ -35,17 +40,16 @@
 	let currentPage = 1;
 	let useUserCats = true;
 	let limitReached = articles.length < perPage;
-
 </script>
 
 <title>Browse</title>
 
-<h1 class="text-neutral-content p-5 font-bold text-xl">Browse recent work</h1>
+<h1 class="p-5 font-bold text-xl">Browse recent work</h1>
 <div class="flex-col justify-center space-y-3 px-5">
 	{#if data.user}
 		<div class="flex">
-			<div class="btn-group p-3 space-x-2">
-				<form action="?/updateMethod" method="POST" use:enhance>
+			<form action="?/updateMethod" method="POST" use:enhance>
+				<div class="btn-group p-3 space-x-2">
 					<button
 						class={!useUserCats ? 'btn btn-active btn-primary btn-disabled text-base-100' : 'btn'}
 						on:click={() => {
@@ -54,8 +58,7 @@
 						}}>Browse all</button
 					>
 					<input hidden name="userCats" value={useUserCats} />
-				</form>
-				<form action="?/updateMethod" method="POST" use:enhance>
+
 					<button
 						class={useUserCats ? 'btn btn-active btn-primary btn-disabled text-base-100' : 'btn'}
 						on:click={() => {
@@ -64,17 +67,14 @@
 						}}>My catagories only</button
 					>
 					<input hidden name="userCats" value={useUserCats} />
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 	{/if}
 
 	{#each articles as article, i}
-		<div class="card w-auto  bg-neutral text-neutral-content shadow-xl">
-			<div class="card-body">
-				<a href={article.pdf_url} class="card-title">{article.title}</a>
-				<p>🔥: {article.avgRating}</p>
-			</div>
+		<div transition:scale>
+			<ArticleCard {article} />
 		</div>
 	{/each}
 	{#if !limitReached}

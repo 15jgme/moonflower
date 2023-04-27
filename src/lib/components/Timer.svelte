@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { currentUser, currentState, stateEnum } from '$lib/components/pocketbase.js';
-	import { pb } from '$lib/components/pocketbase';
-	import { Record } from 'pocketbase';
-	import { onMount } from 'svelte';
+	import type { Record } from 'pocketbase';
+	import { browser } from '$app/environment';
 
 	interface time {
 		hours: number;
@@ -31,9 +29,14 @@
 </script>
 
 {#if remaining != undefined}
-	<div class="font-extrabold inline-flex space-x-3 dark:text-white">
-		<p class="font-medium">Thank you for your review! Check back in:</p>
-		<p>{remaining.hours} <span>H</span></p>
-		<p>{remaining.minutes} <span>M</span></p>
+	<div class="font-extrabold inline-flex space-x-3">
+		{#if timerExpired}
+			<p>Your new selection is ready!</p>
+			<p>Reload the page to pick your paper</p>
+		{:else}
+			<p class="font-medium">Thank you for your review! Check back in:</p>
+			<p>{remaining.hours} <span>H</span></p>
+			<p>{remaining.minutes} <span>M</span></p>
+		{/if}
 	</div>
 {/if}

@@ -1,4 +1,4 @@
-import { serializeNonPOJO } from "$lib/helpers.js";
+import { serializeNonPOJO } from "$lib/helpers.ts";
 
 export const load: PageLoad = async ({locals}) => {
     if(locals.user){

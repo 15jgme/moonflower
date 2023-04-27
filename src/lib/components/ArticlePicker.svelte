@@ -89,7 +89,6 @@
 						on:click={() => {
 							if ($currentState == stateEnum.AWAITVIEW) {
 								currentState.set(stateEnum.AWAITREVIEW);
-								console.log(stateEnum.AWAITREVIEW);
 							}
 						}}
 						href={art.url}

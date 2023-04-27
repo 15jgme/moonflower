@@ -1,6 +1,6 @@
 import {redirect} from `@sveltejs/kit`
 import type {Actions} from './$types'
-import {serializeNonPOJO} from '$lib/helpers.js'
+import {serializeNonPOJO} from '$lib/helpers.ts'
 
 export const load: PageLoad = async ({locals}) => {
 

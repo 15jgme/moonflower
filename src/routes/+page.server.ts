@@ -1,4 +1,4 @@
-import { serializeNonPOJOProm } from '$lib/helpers.js';
+import { serializeNonPOJOProm } from '$lib/helpers.ts';
 /** @type {import('./$types').PageLoad} */
 
 async function updateState(lastReviewProm): boolean {
@@ -111,6 +111,6 @@ export const actions = {
 			return locals.pb.collection('articles').update(locals.user.lastPickedPost, data);
 		}
 
-		Promise.all([updateProfile(), updateArticle()]).then((value) => {console.log(value)})
+		Promise.all([updateProfile(), updateArticle()])
 	}
 };
