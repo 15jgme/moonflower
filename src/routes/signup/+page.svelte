@@ -29,7 +29,7 @@
 <div
 	class="border max-w-sm p-4 sm:p-6 lg:p-8 py-6 shadow-md rounded-lg w-full mt-6 bg-neutral mx-auto"
 >
-	<h3 class="text-xl font-medium text-center">🌕Moonflower🌸</h3>
+	<h3 class="text-xl font-medium text-center text-base-100">🌕Moonflower🌸</h3>
 	<form
 		method="POST"
 		action="?/register"
@@ -52,7 +52,7 @@
 	>
 		<div class="form-control w-full max-w-xs">
 			<label for="name" class="label font-medium pb-1">
-				<span class="label-text">Username</span>
+				<span class="label-text text-base-100">Username</span>
 			</label>
 			<input
 				type="text"
@@ -63,7 +63,7 @@
 		</div>
 		<div class="form-control w-full max-w-xs">
 			<label for="email" class="label font-medium pb-1">
-				<span class="label-text">Email</span>
+				<span class="label-text text-base-100">Email</span>
 			</label>
 			<input
 				type="email"
@@ -74,13 +74,13 @@
 		</div>
 		<div class="form-control w-full max-w-xs">
 			<label for="password" class="label font-medium pb-1">
-				<span class="label-text">Password</span>
+				<span class="label-text text-base-100">Password</span>
 			</label>
 			<input type="password" name="password" class="input input-bordered w-full max-w-xs" />
 		</div>
 		<div class="form-control w-full max-w-xs">
 			<label for="passwordConfirm" class="label font-medium pb-1">
-				<span class="label-text">Confirm Password</span>
+				<span class="label-text text-base-100">Confirm Password</span>
 			</label>
 			<input type="password" name="passwordConfirm" class="input input-bordered w-full max-w-sm" />
 		</div>

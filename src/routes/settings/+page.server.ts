@@ -55,7 +55,7 @@ export const actions = {
 		catagories_parsed.forEach(catagory => {
 			user_catagories_to_patch.push(catagory.id)
 		});
-		console.log(user_catagories_to_patch)
+		// console.log(user_catagories_to_patch)
 		await locals.pb.collection('users').update(locals.user.id, {
 			subscribedCats: user_catagories_to_patch
 		});
@@ -63,7 +63,7 @@ export const actions = {
 	},
 	removeCatagories: async ({ request, locals }) => {
 		const formData = await request.formData()
-		console.log(formData)
+		// console.log(formData)
 		const usersCatagories_raw = Object.fromEntries([...formData]);
 		let ids_to_remove = Object.keys(usersCatagories_raw)
 
