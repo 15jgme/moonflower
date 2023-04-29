@@ -12,10 +12,11 @@
 	const groupBy = (item: any) => item.group;
 
 	let catagory_loading: boolean = false;
+	let unique = {};
 </script>
 
 <body>
-	<div class="items-center justify-center flex flex-col multiselect">
+	<div class="items-center justify-center flex flex-col multiselect py-2">
 		<div class="flex flex-col border-opacity-50">
 			<div class="divider">Your catagories</div>
 			<div class="py-5 card bg-base-300 rounded-box place-items-center">
@@ -76,18 +77,21 @@
 									catagory_loading = false;
 								}
 								update();
+								unique = {}; // Wow -> https://stackoverflow.com/questions/58153729/restart-or-re-init-component-in-svelte
 								invalidateAll();
 							};
 						}}
 					>
-						<div class="w-min">
-							<Select
-								items={data.availableCatagories}
-								multiple={true}
-								{groupBy}
-								name="catagories"
-							/>
-						</div>
+						{#key unique}
+							<div class="w-min">
+								<Select
+									items={data.availableCatagories}
+									multiple={true}
+									{groupBy}
+									name="catagories"
+								/>
+							</div>
+						{/key}
 						<div class="px-2" />
 						<button class="btn btn-primary"> save </button>
 					</form>
